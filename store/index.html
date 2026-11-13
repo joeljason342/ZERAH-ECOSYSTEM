@@ -717,36 +717,13 @@
         const icon = makeElement("div", "product-icon", icons[product.category] || "🛍️");
         const category = makeElement("div", "product-category", product.category || "General");
         const name = makeElement("div", "product-name", product.name);
-        const discountPercent = Number(product.discount_percent || 0);
-const salePrice = Number(product.selling_price);
-const originalPrice = discountPercent > 0
-  ? salePrice / (1 - discountPercent / 100)
-  : null;
-
-const price = makeElement("div", "price-row");
-
-if (discountPercent > 0 && discountPercent < 100) {
-  price.appendChild(
-    makeElement("span", "sale-price", money(salePrice))
-  );
-  price.appendChild(
-    makeElement("span", "original-price", money(originalPrice))
-  );
-  price.appendChild(
-    makeElement("span", "discount-badge", `${discountPercent}% OFF`)
-  );
-} else {
-  price.appendChild(
-    makeElement("span", "sale-price", money(salePrice))
-  );
-  const discounts = {
-  "Aashirvaad Atta 5 kg": 10,
-  "Coca-Cola 750 ml": 15,
-  "Good Day Cookies": 20,
-};
-
-const discountPercent = discounts[product.name] || 0;
-}
+        
+                   const price = makeElement(
+       "div",
+       "product-price",
+       money(product.selling_price)
+     );
+     
         const stock = makeElement(
           "div",
           "product-stock",
