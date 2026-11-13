@@ -1,0 +1,1 @@
+window.ZERAH_SUPABASE = Object.freeze({url: 'https://sfkhtgaknqzvmwfzbacd.supabase.co', publishableKey: 'sb_publishable_dWMlwtQMIR-fvF9tNFf7oQ_AP2GCDrX', storeId: "11111111-1111-4111-8111-111111111111"});

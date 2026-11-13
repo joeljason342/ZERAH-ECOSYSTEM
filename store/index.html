@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ZERAH Store</title>
+  <style>
+    /* Store offer banner */
+.offer-banner {
+  margin: 18px 0;
+  padding: 18px 22px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, #183d2c, #245b42);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 8px 22px rgba(24, 61, 44, 0.16);
+}
+
+.offer-banner h2 {
+  margin: 0 0 5px;
+  font-size: 21px;
+}
+
+.offer-banner p {
+  margin: 0;
+  color: #e1ece3;
+  line-height: 1.45;
+}
+
+.offer-badge {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: #eaf2ec;
+  color: #183d2c;
+  font-weight: 800;
+}
+
+.product-card {
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(24, 61, 44, 0.12);
+}
+
+.discount-badge {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: #eaf2ec;
+  color: #245b42;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.sale-price {
+  color: #245b42;
+  font-size: 19px;
+  font-weight: 800;
+}
+
+.original-price {
+  color: #8a918b;
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+@media (max-width: 600px) {
+  .offer-banner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+    :root {
+      --green: #245b42;
+      --green-dark: #183d2c;
+      --green-soft: #eaf2ec;
+      --ink: #202820;
+      --muted: #737b74;
+      --line: #e5e9e4;
+      --paper: #f7f8f5;
+      --white: #fff;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px Arial, sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      padding: 15px 5%;
+      background: var(--white);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner, main {
+      width: min(100% - 28px, 1080px);
+      margin: auto;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand {
+      color: var(--green);
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+
+    .store-mode {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    main { padding: 25px 0 110px; }
+
+    .welcome {
+      padding: 22px;
+      border-radius: 18px;
+      background: var(--green-dark);
+      color: white;
+    }
+
+    .welcome-label {
+      color: #c9dfcf;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      margin: 10px 0 7px;
+      font-size: clamp(25px, 5vw, 36px);
+    }
+
+    .welcome p {
+      margin: 0;
+      color: #e1ece3;
+      line-height: 1.5;
+    }
+
+    .search-wrap { margin-top: 18px; }
+
+    #search {
+      width: 100%;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline-color: var(--green);
+      background: white;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin: 26px 0 12px;
+    }
+
+    .section-title h2 { margin: 0; font-size: 20px; }
+
+    .muted { color: var(--muted); font-size: 13px; }
+
+    .categories {
+      display: flex;
+      gap: 9px;
+      overflow-x: auto;
+      padding: 2px 0 8px;
+    }
+
+    .category-button {
+      flex: 0 0 auto;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: white;
+      color: var(--ink);
+    }
+
+    .category-button.active {
+      border-color: var(--green);
+      background: var(--green);
+      color: white;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 210px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: white;
+    }
+
+    .product-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      border-radius: 13px;
+      background: var(--green-soft);
+      font-size: 25px;
+    }
+
+    .product-category {
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .product-name {
+      margin: 5px 0 8px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .product-price {
+      margin-top: auto;
+      color: var(--green);
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .product-stock {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .add-button, .primary-button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: var(--green);
+      color: white;
+      font-weight: 700;
+    }
+
+    .add-button { margin-top: 12px; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+
+    .message {
+      margin-top: 15px;
+      padding: 13px 15px;
+      border-radius: 11px;
+      background: var(--green-soft);
+      line-height: 1.45;
+    }
+
+    .message.error {
+      background: #fff0ee;
+      color: #8b3025;
+    }
+
+    .cart-bar {
+      position: fixed;
+      z-index: 6;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 12px 14px max(12px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: white;
+      box-shadow: 0 -5px 20px #1822190d;
+    }
+
+    .cart-bar-inner {
+      display: flex;
+      width: min(100%, 1080px);
+      margin: auto;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cart-total { font-size: 17px; font-weight: 800; }
+    .cart-count { margin-top: 3px; color: var(--muted); font-size: 12px; }
+
+    .overlay {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background: #0008;
+    }
+
+    .cart-sheet {
+      width: min(100%, 620px);
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 20px 18px max(20px, env(safe-area-inset-bottom));
+      border-radius: 20px 20px 0 0;
+      background: white;
+    }
+
+    .cart-sheet-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cart-sheet h2 { margin: 0; }
+    .close-button { background: #eef1ed; color: var(--ink); }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .quantity-controls { display: flex; align-items: center; gap: 8px; }
+    .quantity-controls button { min-width: 36px; min-height: 36px; padding: 5px; }
+    .payment-note { margin: 14px 0; color: var(--muted); font-size: 13px; line-height: 1.4; }
+    .checkout-button { width: 100%; min-height: 48px; }
+
+    @media (max-width: 420px) {
+      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .product-card { padding: 12px; }
+      .welcome { padding: 18px; }
+    }
+        /* Store app visual refresh */
+    body {
+      background: #f4f6f2;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+
+    header {
+      box-shadow: 0 2px 12px #183d2c0b;
+    }
+
+    .brand {
+      font-size: 23px;
+      letter-spacing: 1.5px;
+    }
+
+    .welcome {
+      position: relative;
+      overflow: hidden;
+      padding: 26px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 90% 10%, #ffffff20 0 70px, transparent 72px),
+        linear-gradient(135deg, #183d2c, #286746);
+      box-shadow: 0 12px 28px #183d2c20;
+    }
+
+    .welcome h1 {
+      max-width: 440px;
+      line-height: 1.12;
+    }
+
+    .welcome p {
+      max-width: 470px;
+    }
+
+    #search {
+      min-height: 52px;
+      border: 1px solid #e1e7df;
+      border-radius: 15px;
+      box-shadow: 0 5px 16px #1939210a;
+    }
+
+    #search:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px #245b4218;
+    }
+
+    .section-title {
+      margin-top: 28px;
+    }
+
+    .category-button {
+      min-height: 42px;
+      padding: 10px 16px;
+      font-weight: 600;
+      box-shadow: 0 2px 7px #19392108;
+    }
+
+    .category-button.active {
+      box-shadow: 0 4px 12px #245b4228;
+    }
+
+    .products {
+      gap: 14px;
+    }
+
+    .product-card {
+      min-height: 230px;
+      padding: 15px;
+      border-color: #e8ece6;
+      border-radius: 18px;
+      box-shadow: 0 5px 16px #19392108;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .product-card:active {
+      transform: scale(.985);
+    }
+
+    .product-icon {
+      width: 100%;
+      height: 100px;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #edf4ee, #f7f8f5);
+      font-size: 42px;
+    }
+
+    .product-category {
+      margin-top: 13px;
+      text-transform: uppercase;
+      letter-spacing: .7px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .product-name {
+      min-height: 38px;
+      font-size: 15px;
+    }
+
+    .product-price {
+      font-size: 18px;
+    }
+
+    .add-button,
+    .primary-button {
+      min-height: 46px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px #245b421c;
+    }
+
+    .cart-bar {
+      padding-top: 13px;
+      box-shadow: 0 -7px 24px #18221912;
+    }
+
+    .cart-total {
+      font-size: 18px;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        padding: 13px 0;
+      }
+
+      main {
+        padding-top: 16px;
+      }
+
+      .welcome {
+        padding: 22px 19px;
+        border-radius: 19px;
+      }
+
+      .welcome h1 {
+        font-size: 28px;
+      }
+
+      .products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .product-card {
+        min-height: 220px;
+        padding: 12px;
+      }
+
+      .product-icon {
+        height: 82px;
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">ZERAH</div>
+      <div class="store-mode">IN-STORE SHOPPING<br>Pay at the cashier</div>
+    </div>
+  </header>
+
+  <main>
+    <section class="offer-banner">
+  <div>
+    <h2>Fresh finds, special prices</h2>
+    <p>Limited-time offers on selected favourites. Shop your picks while they last.</p>
+  </div>
+  <span class="offer-badge">Save up to 20%</span>
+</section>
+    <section class="welcome">
+      <div class="welcome-label">SHOP THIS STORE</div>
+      <h1>Find what you need</h1>
+      <p>Browse products, add them to your cart, and show your order to the cashier.</p>
+    </section>
+
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Search by product, SKU, or barcode">
+    </div>
+
+    <div id="message" class="message" role="status" hidden></div>
+
+    <div class="section-title">
+      <h2>Categories</h2>
+    </div>
+    <nav id="categories" class="categories" aria-label="Product categories"></nav>
+
+    <div class="section-title">
+      <h2>Products</h2>
+      <span id="product-count" class="muted"></span>
+    </div>
+    <section id="products" class="products" aria-live="polite"></section>
+  </main>
+
+  <div class="cart-bar">
+    <div class="cart-bar-inner">
+      <div>
+        <div id="cart-total" class="cart-total">₹0.00</div>
+        <div id="cart-count" class="cart-count">0 items</div>
+      </div>
+      <button id="open-cart" class="primary-button">View cart</button>
+    </div>
+  </div>
+
+  <div id="cart-overlay" class="overlay" hidden>
+    <section class="cart-sheet" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+      <div class="cart-sheet-heading">
+        <h2 id="cart-title">Your cart</h2>
+        <button id="close-cart" class="close-button">Close</button>
+      </div>
+      <div id="cart-items"></div>
+      <p class="payment-note">
+        Show your order to the cashier. Pay there by cash, card, or UPI.
+        Payment is not processed in this app.
+      </p>
+      <button id="checkout" class="primary-button checkout-button">Send order to cashier</button>
+    </section>
+  </div>
+
+  <script src="../shared/config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const db = window.supabase.createClient(
+      window.ZERAH_SUPABASE.url,
+      window.ZERAH_SUPABASE.publishableKey
+    );
+
+    const productsById = new Map();
+    const cart = new Map();
+    let activeCategory = "All";
+
+    const icons = {
+      "Biscuits": "🍪",
+      "Drinks": "🥤",
+      "Cleaning": "🧼",
+      "Snacks": "🍜",
+      "Personal Care": "🧴",
+      "Groceries": "🛒",
+      "Dairy": "🥛"
+    };
+
+    function money(value) {
+      return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR"
+      }).format(Number(value) || 0);
+    }
+
+    function makeElement(tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+      return element;
+    }
+
+    function showMessage(text, isError) {
+      const message = document.getElementById("message");
+      message.hidden = false;
+      message.className = isError ? "message error" : "message";
+      message.textContent = text;
+    }
+
+    async function loadCatalog() {
+      const storeId = window.ZERAH_SUPABASE.storeId;
+
+      const results = await Promise.all([
+        db.from("zerah_products")
+          .select("id,sku,barcode,name,category,selling_price,is_active")
+          .eq("is_active", true)
+          .order("name"),
+        db.from("zerah_inventory")
+          .select("product_id,quantity_on_hand")
+          .eq("store_id", storeId)
+      ]);
+
+      if (results[0].error || results[1].error) {
+        showMessage("Could not load the store catalogue. Check the database connection.", true);
+        return;
+      }
+
+      const stockById = new Map();
+      for (const row of results[1].data) {
+        stockById.set(Number(row.product_id), Number(row.quantity_on_hand));
+      }
+
+      productsById.clear();
+      for (const product of results[0].data) {
+        productsById.set(Number(product.id), {
+          ...product,
+          id: Number(product.id),
+          selling_price: Number(product.selling_price),
+          quantity_on_hand: stockById.get(Number(product.id)) || 0
+        });
+      }
+
+      renderCategories();
+      renderProducts();
+    }
+
+    function renderCategories() {
+      const categories = document.getElementById("categories");
+      categories.replaceChildren();
+
+      const names = ["All", ...new Set(
+        [...productsById.values()].map(product => product.category || "General")
+      )];
+
+      for (const name of names) {
+        const button = makeElement("button", "category-button", name);
+        if (name === activeCategory) button.classList.add("active");
+
+        button.addEventListener("click", () => {
+          activeCategory = name;
+          renderCategories();
+          renderProducts();
+        });
+
+        categories.appendChild(button);
+      }
+    }
+
+    function renderProducts() {
+      const root = document.getElementById("products");
+      const query = document.getElementById("search").value.trim().toLowerCase();
+
+      const matching = [...productsById.values()].filter(product => {
+        const matchesCategory =
+          activeCategory === "All" || (product.category || "General") === activeCategory;
+
+        const searchable = [
+          product.name,
+          product.sku,
+          product.barcode,
+          product.category
+        ].join(" ").toLowerCase();
+
+        return matchesCategory && searchable.includes(query);
+      });
+
+      root.replaceChildren();
+      document.getElementById("product-count").textContent =
+        matching.length + (matching.length === 1 ? " item" : " items");
+
+      if (!matching.length) {
+        root.appendChild(makeElement("p", "muted", "No matching products found."));
+        return;
+      }
+
+      for (const product of matching) {
+        const card = makeElement("article", "product-card");
+        const icon = makeElement("div", "product-icon", icons[product.category] || "🛍️");
+        const category = makeElement("div", "product-category", product.category || "General");
+        const name = makeElement("div", "product-name", product.name);
+        const discountPercent = Number(product.discount_percent || 0);
+const salePrice = Number(product.selling_price);
+const originalPrice = discountPercent > 0
+  ? salePrice / (1 - discountPercent / 100)
+  : null;
+
+const price = makeElement("div", "price-row");
+
+if (discountPercent > 0 && discountPercent < 100) {
+  price.appendChild(
+    makeElement("span", "sale-price", money(salePrice))
+  );
+  price.appendChild(
+    makeElement("span", "original-price", money(originalPrice))
+  );
+  price.appendChild(
+    makeElement("span", "discount-badge", `${discountPercent}% OFF`)
+  );
+} else {
+  price.appendChild(
+    makeElement("span", "sale-price", money(salePrice))
+  );
+  const discounts = {
+  "Aashirvaad Atta 5 kg": 10,
+  "Coca-Cola 750 ml": 15,
+  "Good Day Cookies": 20,
+};
+
+const discountPercent = discounts[product.name] || 0;
+}
+        const stock = makeElement(
+          "div",
+          "product-stock",
+          product.quantity_on_hand > 0
+            ? product.quantity_on_hand + " available"
+            : "Currently unavailable"
+        );
+        const add = makeElement("button", "add-button", "Add to cart");
+
+        add.disabled = product.quantity_on_hand < 1;
+        add.addEventListener("click", () => {
+          const next = (cart.get(product.id) || 0) + 1;
+          if (next <= product.quantity_on_hand) {
+            cart.set(product.id, next);
+            renderCart();
+          }
+        });
+
+        card.append(icon, category, name, price, stock, add);
+        root.appendChild(card);
+      }
+    }
+
+    function renderCart() {
+      const root = document.getElementById("cart-items");
+      root.replaceChildren();
+
+      let total = 0;
+      let count = 0;
+
+      for (const [id, quantity] of cart.entries()) {
+        const product = productsById.get(id);
+        if (!product) continue;
+
+        total += product.selling_price * quantity;
+        count += quantity;
+
+        const row = makeElement("div", "cart-row");
+        const description = makeElement(
+          "div",
+          "",
+          product.name + " × " + quantity + " — " +
+            money(product.selling_price * quantity)
+        );
+
+        const controls = makeElement("div", "quantity-controls");
+        const remove = makeElement("button", "", "−");
+        const add = makeElement("button", "", "+");
+
+        remove.setAttribute("aria-label", "Remove one " + product.name);
+        add.setAttribute("aria-label", "Add one " + product.name);
+
+        remove.addEventListener("click", () => changeQuantity(id, -1));
+        add.addEventListener("click", () => changeQuantity(id, 1));
+
+        controls.append(remove, add);
+        row.append(description, controls);
+        root.appendChild(row);
+      }
+
+      if (!count) {
+        root.appendChild(makeElement("p", "muted", "Your cart is empty."));
+      }
+
+      document.getElementById("cart-total").textContent = money(total);
+      document.getElementById("cart-count").textContent =
+        count + (count === 1 ? " item" : " items");
+    }
+
+    function changeQuantity(id, change) {
+      const product = productsById.get(id);
+      const next = (cart.get(id) || 0) + change;
+
+      if (next <= 0) cart.delete(id);
+      else if (product && next <= product.quantity_on_hand) cart.set(id, next);
+
+      renderCart();
+    }
+
+    document.getElementById("search").addEventListener("input", renderProducts);
+
+    document.getElementById("open-cart").addEventListener("click", () => {
+      document.getElementById("cart-overlay").hidden = false;
+    });
+
+    document.getElementById("close-cart").addEventListener("click", () => {
+      document.getElementById("cart-overlay").hidden = true;
+    });
+
+    document.getElementById("cart-overlay").addEventListener("click", event => {
+      if (event.target.id === "cart-overlay") {
+        event.currentTarget.hidden = true;
+      }
+    });
+
+    document.getElementById("checkout").addEventListener("click", async () => {
+      if (!cart.size) {
+        window.alert("Add a product to your cart first.");
+        return;
+      }
+
+      const button = document.getElementById("checkout");
+      button.disabled = true;
+      button.textContent = "Sending order…";
+
+      const items = [...cart.entries()].map(([product_id, quantity]) => ({
+        product_id: product_id,
+        quantity: quantity
+      }));
+
+      const result = await db.rpc("zerah_create_store_order", {
+        p_store_id: window.ZERAH_SUPABASE.storeId,
+        p_items: items
+      });
+
+      button.disabled = false;
+      button.textContent = "Send order to cashier";
+
+      if (result.error) {
+        window.alert("Order error: " + result.error.message);
+        return;
+      }
+
+      cart.clear();
+      renderCart();
+      document.getElementById("cart-overlay").hidden = true;
+      showMessage(
+        "Order sent. Show reference " + result.data +
+          " to the cashier. Pay at the counter by cash, card, or UPI.",
+        false
+      );
+      await loadCatalog();
+    });
+
+    renderCart();
+    loadCatalog();
+  </script>
+</body>
+</html>

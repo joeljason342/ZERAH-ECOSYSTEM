@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZERAH StockFlow</title>
+
+<style>
+:root {
+    --bg: #f5f6f2;
+    --card: #ffffff;
+    --text: #202820;
+    --muted: #788078;
+    --green: #286746;
+    --light-green: #e5f1e8;
+    --border: #e5e8e1;
+    --red: #b93838;
+    --amber: #95621a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 235px;
+    background: #1f3026;
+    color: white;
+    padding: 28px 18px;
+    flex-shrink: 0;
+}
+
+.brand {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.brand span {
+    color: #a7d4ae;
+}
+
+.brand-sub {
+    color: #bac9bd;
+    font-size: 12px;
+    margin-bottom: 42px;
+}
+
+.nav-label {
+    color: #a9b7ac;
+    font-size: 11px;
+    letter-spacing: 1.3px;
+    margin: 22px 10px 10px;
+}
+
+.nav-btn {
+    width: 100%;
+    text-align: left;
+    border: 0;
+    background: transparent;
+    color: #d9e3db;
+    padding: 13px 12px;
+    border-radius: 8px;
+    margin: 3px 0;
+}
+
+.nav-btn:hover,
+.nav-btn.active {
+    background: #365441;
+    color: white;
+}
+
+.sidebar-note {
+    font-size: 12px;
+    line-height: 1.6;
+    color: #b9c8bc;
+    margin: 42px 8px 0;
+}
+
+.main {
+    flex: 1;
+    min-width: 0;
+}
+
+.topbar {
+    height: 76px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.topbar h2 {
+    font-size: 19px;
+    margin: 0;
+}
+
+.store-label {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.content {
+    padding: 30px 32px;
+    max-width: 1450px;
+    margin: auto;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+h1 {
+    font-size: 27px;
+    margin: 0 0 8px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.btn {
+    padding: 11px 15px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: white;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.btn-primary {
+    background: var(--green);
+    color: white;
+    border-color: var(--green);
+}
+
+.btn-primary:hover {
+    background: #1f5338;
+}
+
+.btn-danger {
+    color: var(--red);
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 17px;
+    margin-bottom: 24px;
+}
+
+.stat, .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 11px;
+}
+
+.stat {
+    padding: 20px;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 750;
+    margin-top: 13px;
+}
+
+.stat-foot {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 7px;
+}
+
+.panel {
+    padding: 22px;
+    margin-bottom: 22px;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.panel-heading h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 620px;
+}
+
+th {
+    text-align: left;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    background: #f8f9f6;
+}
+
+th, td {
+    padding: 14px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.product-name {
+    font-weight: 650;
+}
+
+.product-code {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-good {
+    background: var(--light-green);
+    color: var(--green);
+}
+
+.badge-low {
+    background: #fff0d7;
+    color: var(--amber);
+}
+
+.badge-out {
+    background: #fde8e8;
+    color: var(--red);
+}
+
+.toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 17px;
+    flex-wrap: wrap;
+}
+
+.field {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #dce1d8;
+    border-radius: 7px;
+    background: white;
+    color: var(--text);
+    outline: none;
+}
+
+.field:focus {
+    border-color: var(--green);
+}
+
+.toolbar .field {
+    width: auto;
+    min-width: 180px;
+    flex: 1;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 650;
+    margin-bottom: 7px;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+.form-actions {
+    display: flex;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.billing-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.cart-total {
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+    padding-top: 15px;
+}
+
+.total-line {
+    display: flex;
+    justify-content: space-between;
+    margin: 12px 0;
+    font-size: 14px;
+}
+
+.total-line.grand {
+    font-weight: 800;
+    font-size: 21px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.empty {
+    padding: 25px 10px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.history-item:last-child {
+    border-bottom: 0;
+}
+
+.history-item small {
+    color: var(--muted);
+    display: block;
+    margin-top: 5px;
+}
+
+.positive {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.negative {
+    color: var(--red);
+    font-weight: 700;
+}
+
+.notice {
+    background: #eef4ed;
+    color: #315a3c;
+    padding: 12px 14px;
+    border-radius: 7px;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-bottom: 18px;
+}
+
+@media (max-width: 950px) {
+    .sidebar {
+        width: 190px;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .billing-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 650px) {
+    .app {
+        display: block;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 17px;
+    }
+
+    .brand-sub {
+        margin-bottom: 17px;
+    }
+
+    .nav-label, .sidebar-note {
+        display: none;
+    }
+
+    .nav-menu {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 4px;
+    }
+
+    .topbar {
+        height: 62px;
+        padding: 0 17px;
+    }
+
+    .content {
+        padding: 20px 14px;
+    }
+
+    .page-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .stats {
+        gap: 10px;
+    }
+
+    .stat {
+        padding: 15px;
+    }
+
+    .stat-value {
+        font-size: 23px;
+    }
+
+    .panel {
+        padding: 15px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full {
+        grid-column: auto;
+    }
+}
+
+/* Supabase authentication screen */
+[hidden]{display:none !important;}
+.auth-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--bg)}
+.auth-card{width:min(100%,420px);background:#fff;border:1px solid var(--border);border-radius:14px;padding:30px;box-shadow:0 12px 35px rgba(20,40,25,.08)}
+.auth-brand{font-size:25px;font-weight:800;letter-spacing:1px;color:#1f3026;margin-bottom:4px}.auth-brand span{color:#286746}
+.auth-card h1{font-size:23px;margin:22px 0 8px}.auth-help{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.auth-card .form-group{margin:14px 0}.auth-actions{display:grid;gap:10px;margin-top:18px}.auth-actions button{width:100%}
+.auth-links{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px}.auth-link{border:0;background:none;color:var(--green);text-decoration:underline;padding:4px;font-size:13px}
+.auth-message{font-size:13px;line-height:1.5;margin-top:14px;padding:10px;border-radius:7px;display:none;overflow-wrap:anywhere}.auth-message.error{display:block;background:#fde8e8;color:#8e2525}.auth-message.success{display:block;background:#e5f1e8;color:#245537}
+#signOutButton{margin-left:12px;white-space:nowrap}
+@media(max-width:500px){.auth-card{padding:22px}.topbar{padding:0 14px}.store-label{display:none}}
+
+</style>
+</head>
+
+<body>
+<section class="auth-screen" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-brand">ZERAH<span>.</span></div>
+    <div class="brand-sub" style="color:#788078;margin-bottom:0">STOCKFLOW · STORE MANAGEMENT</div>
+    <h1 id="authHeading">Sign in to StockFlow</h1>
+    <p class="auth-help" id="authHelp">Use your Supabase account to access your store workspace.</p>
+    <form id="authForm">
+      <div class="form-group"><label for="authEmail">Email address</label><input class="field" id="authEmail" type="email" autocomplete="email" required></div>
+      <div class="form-group" id="passwordGroup"><label for="authPassword">Password</label><input class="field" id="authPassword" type="password" autocomplete="current-password" minlength="6" required></div>
+      <div class="auth-actions"><button class="btn btn-primary" id="authSubmit" type="submit">Sign in</button></div>
+    </form>
+    <div class="auth-links"><button class="auth-link" type="button" id="showSignup">Create account</button><button class="auth-link" type="button" id="resetPassword">Forgot password?</button><button class="auth-link" type="button" id="showLogin" hidden>Back to sign in</button></div>
+    <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
+  </div>
+</section>
+<div class="app" id="stockflowApp" hidden>
+
+    <aside class="sidebar">
+        <div class="brand">ZERAH<span>.</span></div>
+        <div class="brand-sub">STOCKFLOW · STORE MANAGEMENT</div>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <nav class="nav-menu">
+            <button class="nav-btn active" data-page="dashboard">▦ &nbsp; Dashboard</button>
+            <button class="nav-btn" data-page="inventory">▤ &nbsp; Inventory</button>
+            <button class="nav-btn" data-page="billing">▣ &nbsp; Billing / POS</button>
+            <button class="nav-btn" data-page="history">↻ &nbsp; Stock History</button>
+        </nav>
+
+        <div class="sidebar-note">
+            General Store Edition<br>
+            Demo version · Sample data
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <h2 id="topTitle">Dashboard</h2>
+            <div style="display:flex;align-items:center;gap:10px"><div class="store-label">General Store / Demo</div><button class="btn" id="signOutButton" type="button">Sign out</button></div>
+        </header>
+
+        <div class="content">
+
+            <!-- DASHBOARD -->
+            <section class="page active" id="dashboard">
+                <div class="page-heading">
+                    <div>
+                        <h1>Good day, Shopkeeper.</h1>
+                        <div class="subtitle">
+                            Here's what's happening with your store today.
+                            <br><small>Sample product costs are illustrative, not supplier-verified.</small>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showPage('billing')">
+                        + New Sale
+                    </button>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-label">Total Products</div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <div class="stat-foot">Products in inventory</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Low Stock</div>
+                        <div class="stat-value" id="lowStock">0</div>
+                        <div class="stat-foot">Items to restock</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Out of Stock</div>
+                        <div class="stat-value" id="outStock">0</div>
+                        <div class="stat-foot">Unavailable items</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Today's Sales</div>
+                        <div class="stat-value" id="todaySales">₹0</div>
+                        <div class="stat-foot" id="todayCount">0 completed bills</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Today's Gross Profit</div>
+                        <div class="stat-value" id="todayProfit">₹0</div>
+                        <div class="stat-foot">Only sales with known costs</div>
+                    </div>
+
+                    <div class="stat">
+                        <div class="stat-label">Stock Cost Value</div>
+                        <div class="stat-value" id="stockCostValue">₹0</div>
+                        <div class="stat-foot">Current stock × purchase cost</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Items that need attention</h3>
+                        <button class="btn" onclick="showPage('inventory')">
+                            View inventory
+                        </button>
+                    </div>
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Stock left</th>
+                                    <th>Minimum stock</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attentionTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Recent sales</h3>
+                        <button class="btn" onclick="showPage('history')">
+                            View history
+                        </button>
+                    </div>
+                    <div id="recentSales"></div>
+                </div>
+            </section>
+
+            <!-- INVENTORY -->
+            <section class="page" id="inventory">
+                <div class="page-heading">
+                    <div>
+                        <h1>Inventory</h1>
+                        <div class="subtitle">
+                            Manage products, quantities and restocking.
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="showProductForm()">
+                        + Add Product
+                    </button>
+                </div>
+
+                <div class="panel" id="productFormPanel" hidden>
+                    <div class="panel-heading">
+                        <h3 id="productFormTitle">Add a product</h3>
+                    </div>
+
+                    <form id="productForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="productName">Product name</label>
+                                <input class="field" id="productName" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productCategory">Category</label>
+                                <select class="field" id="productCategory">
+                                    <option>Snacks</option>
+                                    <option>Biscuits</option>
+                                    <option>Drinks</option>
+                                    <option>Groceries</option>
+                                    <option>Personal Care</option>
+                                    <option>Cleaning</option>
+                                    <option>Dairy</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productCost">Purchase cost per unit (₹)</label>
+                                <input class="field" id="productCost"
+                                       type="number" min="0" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productPrice">Selling price (₹)</label>
+                                <input class="field" id="productPrice"
+                                       type="number" min="0.01" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productStock">Opening stock</label>
+                                <input class="field" id="productStock"
+                                       type="number" min="0" step="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productMinimum">Low-stock threshold</label>
+                                <input class="field" id="productMinimum"
+                                       type="number" min="0" step="1" value="5" required>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn-primary" type="submit">
+                                Save Product
+                            </button>
+                            <button class="btn" type="button"
+                                    onclick="hideProductForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="panel">
+                    <div class="toolbar">
+                        <input class="field" id="searchInput"
+                               placeholder="Search products...">
+
+                        <select class="field" id="categoryFilter">
+                            <option value="">All categories</option>
+                            <option>Snacks</option>
+                            <option>Biscuits</option>
+                            <option>Drinks</option>
+                            <option>Groceries</option>
+                            <option>Personal Care</option>
+                            <option>Cleaning</option>
+                            <option>Dairy</option>
+                            <option>Other</option>
+                        </select>
+
+                        <select class="field" id="statusFilter">
+                            <option value="">All stock statuses</option>
+                            <option value="good">In stock</option>
+                            <option value="low">Low stock</option>
+                            <option value="out">Out of stock</option>
+                        </select>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Buy / Sell</th>
+                                    <th>Margin</th>
+                                    <th>Stock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BILLING -->
+            <section class="page" id="billing">
+                <div class="page-heading">
+                    <div>
+                        <h1>Billing / POS</h1>
+                        <div class="subtitle">
+                            Add products to a bill and complete a demo sale.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notice">
+                    Demo mode: completing a sale reduces stock and records the
+                    transaction in this browser. This is not a tax-compliant
+                    invoicing or production billing system.
+                </div>
+
+                <div class="billing-layout">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3>Select products</h3>
+                        </div>
+
+                        <div class="toolbar">
+                            <input class="field" id="billSearch"
+                                   placeholder="Search a product...">
+                        </div>
+
+                        <div class="table-wrap">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Price</th>
+                                        <th>Available</th>
+                                        <th>Add</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="billProducts"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3>Current bill</h3>
+                            <button class="btn" onclick="clearCart()">Clear</button>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerName">Customer name (optional)</label>
+                            <input class="field" id="customerName"
+                                   placeholder="Walk-in customer">
+                        </div>
+
+                        <div id="cartItems" style="margin-top:15px"></div>
+
+                        <div class="cart-total">
+                            <div class="total-line">
+                                <span>Subtotal</span>
+                                <strong id="subtotal">₹0.00</strong>
+                            </div>
+
+                            <div class="total-line grand">
+                                <span>Total</span>
+                                <span id="grandTotal">₹0.00</span>
+                            </div>
+
+                            <button class="btn btn-primary"
+                                    style="width:100%;margin-top:10px"
+                                    onclick="completeSale()">
+                                Complete Sale
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORY -->
+            <section class="page" id="history">
+                <div class="page-heading">
+                    <div>
+                        <h1>Activity History</h1>
+                        <div class="subtitle">
+                            Review stock movements and completed sales.
+                        </div>
+                    </div>
+
+                    <button class="btn" onclick="exportData()">
+                        Export JSON
+                    </button>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Stock movements</h3>
+                    </div>
+                    <div id="movementHistory"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-heading">
+                        <h3>Completed bills</h3>
+                    </div>
+                    <div id="salesHistory"></div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script>
+const STORAGE_KEY = "zerah-stockflow-demo-v1";
+
+const starterProducts = [
+    // Illustrative demo costs only; replace with actual supplier costs before relying on profit figures.
+    { id: 1, name: "Parle-G Biscuits", category: "Biscuits", cost: 8, price: 10, stock: 24, min: 8 },
+    { id: 2, name: "Coca-Cola 750 ml", category: "Drinks", cost: 32, price: 40, stock: 5, min: 8 },
+    { id: 3, name: "Surf Excel 1 kg", category: "Cleaning", cost: 120, price: 145, stock: 0, min: 4 },
+    { id: 4, name: "Maggi Noodles", category: "Snacks", cost: 10, price: 14, stock: 18, min: 8 },
+    { id: 5, name: "Lux Soap", category: "Personal Care", cost: 27, price: 35, stock: 3, min: 6 },
+    { id: 6, name: "Aashirvaad Atta 5 kg", category: "Groceries", cost: 240, price: 280, stock: 12, min: 4 },
+    { id: 7, name: "Amul Milk 500 ml", category: "Dairy", cost: 26, price: 30, stock: 16, min: 6 },
+    { id: 8, name: "Good Day Cookies", category: "Biscuits", cost: 24, price: 30, stock: 9, min: 5 },
+    { id: 9, name: "Tata Salt 1 kg", category: "Groceries", cost: 22, price: 28, stock: 20, min: 5 },
+    { id: 10, name: "Colgate Toothpaste", category: "Personal Care", cost: 50, price: 65, stock: 4, min: 5 }
+];
+
+let state = loadState();
+let cart = [];
+let editingProductId = null;
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved) {
+            const parsed = JSON.parse(saved);
+
+            if (Array.isArray(parsed.products) &&
+                Array.isArray(parsed.movements) &&
+                Array.isArray(parsed.sales)) {
+                // Older demo products have no purchase cost. Keep it unknown until the user enters it.
+                parsed.products = parsed.products.map(product => ({
+                    ...product,
+                    cost: Number.isFinite(Number(product.cost)) && product.cost !== null
+                        ? Number(product.cost)
+                        : null
+                }));
+                return parsed;
+            }
+        }
+    } catch (error) {
+        console.error("Could not load saved demo data:", error);
+    }
+
+    return {
+        products: starterProducts.map(product => ({ ...product })),
+        movements: [],
+        sales: []
+    };
+}
+
+function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function money(value) {
+    return Number(value).toLocaleString("en-IN", {
+        style: "currency",
+        currency: "INR"
+    });
+}
+
+function escapeHTML(value) {
+    return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+    })[character]);
+}
+
+function stockStatus(product) {
+    if (product.stock <= 0) {
+        return { key: "out", label: "Out of stock", className: "badge-out" };
+    }
+
+    if (product.stock <= product.min) {
+        return { key: "low", label: "Low stock", className: "badge-low" };
+    }
+
+    return { key: "good", label: "In stock", className: "badge-good" };
+}
+
+function showPage(pageId) {
+    document.querySelectorAll(".page").forEach(page => {
+        page.classList.toggle("active", page.id === pageId);
+    });
+
+    document.querySelectorAll(".nav-btn").forEach(button => {
+        button.classList.toggle("active", button.dataset.page === pageId);
+    });
+
+    const titles = {
+        dashboard: "Dashboard",
+        inventory: "Inventory",
+        billing: "Billing / POS",
+        history: "Activity History"
+    };
+
+    document.getElementById("topTitle").textContent = titles[pageId];
+
+    if (pageId === "billing") renderBilling();
+    if (pageId === "inventory") renderInventory();
+}
+
+document.querySelectorAll(".nav-btn").forEach(button => {
+    button.addEventListener("click", () => showPage(button.dataset.page));
+});
+
+function renderDashboard() {
+    const low = state.products.filter(product =>
+        product.stock > 0 && product.stock <= product.min
+    );
+
+    const out = state.products.filter(product => product.stock <= 0);
+
+    const today = new Date().toDateString();
+    const todaysSales = state.sales.filter(sale =>
+        new Date(sale.time).toDateString() === today
+    );
+
+    const revenue = todaysSales.reduce((sum, sale) => sum + sale.total, 0);
+    const profitKnownSales = todaysSales.filter(sale => sale.grossProfit !== null &&
+        Number.isFinite(sale.grossProfit));
+    const grossProfit = profitKnownSales.reduce((sum, sale) => sum + sale.grossProfit, 0);
+    const stockCostValue = state.products.reduce((sum, product) =>
+        sum + (Number.isFinite(product.cost) ? product.cost * product.stock : 0), 0);
+    const unknownCostProducts = state.products.filter(product => !Number.isFinite(product.cost)).length;
+
+    document.getElementById("totalProducts").textContent = state.products.length;
+    document.getElementById("lowStock").textContent = low.length;
+    document.getElementById("outStock").textContent = out.length;
+    document.getElementById("todaySales").textContent = money(revenue);
+    document.getElementById("todayCount").textContent =
+        `${todaysSales.length} completed bills`;
+    document.getElementById("todayProfit").textContent = money(grossProfit);
+    document.getElementById("todayProfit").title = profitKnownSales.length === todaysSales.length
+        ? "Gross profit for today's sales"
+        : `Some sales have unknown costs. Profit shown for ${profitKnownSales.length} of ${todaysSales.length} bills.`;
+    document.getElementById("stockCostValue").textContent = money(stockCostValue);
+    document.getElementById("stockCostValue").title = unknownCostProducts
+        ? `${unknownCostProducts} product(s) have no purchase cost recorded and are excluded.`
+        : "Calculated from recorded purchase costs.";
+
+    const attention = state.products
+        .filter(product => product.stock <= product.min)
+        .sort((a, b) => a.stock - b.stock);
+
+    document.getElementById("attentionTable").innerHTML = attention.length
+        ? attention.map(product => {
+            const status = stockStatus(product);
+
+            return `
+                <tr>
+                    <td><div class="product-name">${escapeHTML(product.name)}</div></td>
+                    <td>${product.stock}</td>
+                    <td>${product.min}</td>
+                    <td><span class="badge ${status.className}">${status.label}</span></td>
+                </tr>
+            `;
+        }).join("")
+        : `<tr><td colspan="4" class="empty">All products are above their minimum stock level.</td></tr>`;
+
+    const recent = state.sales.slice(0, 5);
+
+    document.getElementById("recentSales").innerHTML = recent.length
+        ? recent.map(sale => `
+            <div class="history-item">
+                <div>
+                    <strong>Bill #${sale.id}</strong>
+                    <small>${escapeHTML(sale.customer || "Walk-in customer")} · ${new Date(sale.time).toLocaleString()}</small>
+                </div>
+                <div style="text-align:right">
+                    <strong>${money(sale.total)}</strong>
+                    <small>${Number.isFinite(sale.grossProfit) ? `Gross profit ${money(sale.grossProfit)}` : "Cost not recorded"}</small>
+                </div>
+            </div>
+        `).join("")
+        : `<div class="empty">No sales yet. Try completing a demo sale.</div>`;
+}
+
+function renderInventory() {
+    const search = document.getElementById("searchInput").value.toLowerCase().trim();
+    const category = document.getElementById("categoryFilter").value;
+    const statusFilter = document.getElementById("statusFilter").value;
+
+    const filtered = state.products.filter(product => {
+        const status = stockStatus(product);
+
+        return product.name.toLowerCase().includes(search) &&
+            (!category || product.category === category) &&
+            (!statusFilter || status.key === statusFilter);
+    });
+
+    document.getElementById("inventoryTable").innerHTML = filtered.length
+        ? filtered.map(product => {
+            const status = stockStatus(product);
+
+            return `
+                <tr>
+                    <td>
+                        <div class="product-name">${escapeHTML(product.name)}</div>
+                        <div class="product-code">SKU-${product.id}</div>
+                    </td>
+                    <td>${escapeHTML(product.category)}</td>
+                    <td>${Number.isFinite(product.cost) ? money(product.cost) : "Not set"}<br><small>Sell: ${money(product.price)}</small></td>
+                    <td>${Number.isFinite(product.cost) ? money(product.price - product.cost) : "—"}</td>
+                    <td>${product.stock}</td>
+                    <td><span class="badge ${status.className}">${status.label}</span></td>
+                    <td>
+                        <button class="btn" onclick="adjustStock(${product.id}, 1)">+ Stock</button>
+                        <button class="btn" onclick="adjustStock(${product.id}, -1)">- Stock</button>
+                        <button class="btn" onclick="editProduct(${product.id})">Edit</button>
+                    </td>
+                </tr>
+            `;
+        }).join("")
+        : `<tr><td colspan="7" class="empty">No matching products found.</td></tr>`;
+}
+
+document.getElementById("searchInput").addEventListener("input", renderInventory);
+document.getElementById("categoryFilter").addEventListener("change", renderInventory);
+document.getElementById("statusFilter").addEventListener("change", renderInventory);
+
+function showProductForm() {
+    editingProductId = null;
+    document.getElementById("productForm").reset();
+    document.getElementById("productMinimum").value = 5;
+    document.getElementById("productFormTitle").textContent = "Add a product";
+    document.getElementById("productCost").value = "";
+    document.getElementById("productStock").disabled = false;
+    document.getElementById("productFormPanel").hidden = false;
+    document.getElementById("productName").focus();
+}
+
+function hideProductForm() {
+    document.getElementById("productFormPanel").hidden = true;
+    editingProductId = null;
+}
+
+function editProduct(id) {
+    const product = state.products.find(item => item.id === id);
+    if (!product) return;
+
+    editingProductId = id;
+
+    document.getElementById("productFormTitle").textContent = "Edit product";
+    document.getElementById("productName").value = product.name;
+    document.getElementById("productCategory").value = product.category;
+    document.getElementById("productPrice").value = product.price;
+    document.getElementById("productCost").value =
+        Number.isFinite(product.cost) ? product.cost : "";
+    document.getElementById("productStock").value = product.stock;
+    document.getElementById("productStock").disabled = true;
+    document.getElementById("productMinimum").value = product.min;
+    document.getElementById("productFormPanel").hidden = false;
+
+    document.getElementById("productFormPanel").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+}
+
+document.getElementById("productForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const name = document.getElementById("productName").value.trim();
+    const category = document.getElementById("productCategory").value;
+    const costInput = document.getElementById("productCost").value;
+    const cost = costInput === "" ? NaN : Number(costInput);
+    const price = Number(document.getElementById("productPrice").value);
+    const stock = Number(document.getElementById("productStock").value);
+    const min = Number(document.getElementById("productMinimum").value);
+
+    if (!name || !Number.isFinite(cost) || cost < 0 ||
+        !Number.isFinite(price) || price <= 0 ||
+        !Number.isInteger(stock) || stock < 0 ||
+        !Number.isInteger(min) || min < 0) {
+        alert("Please enter valid product details.");
+        return;
+    }
+
+    if (editingProductId !== null) {
+        const product = state.products.find(item => item.id === editingProductId);
+
+        if (!product) return;
+
+        product.name = name;
+        product.category = category;
+        product.cost = cost;
+        product.price = price;
+        product.min = min;
+    } else {
+        const product = {
+            id: Math.max(0, ...state.products.map(item => item.id)) + 1,
+            name,
+            category,
+            cost,
+            price,
+            stock,
+            min
+        };
+
+        state.products.push(product);
+
+        if (stock > 0) {
+            state.movements.unshift({
+                id: Date.now(),
+                productId: product.id,
+                productName: name,
+                change: stock,
+                reason: "Opening stock",
+                time: new Date().toISOString()
+            });
+        }
+    }
+
+    saveState();
+    hideProductForm();
+    renderAll();
+});
+
+function adjustStock(id, direction) {
+    const product = state.products.find(item => item.id === id);
+    if (!product) return;
+
+    const action = direction > 0 ? "Add" : "Remove";
+    const amountText = prompt(`${action} how many units of ${product.name}?`);
+
+    if (amountText === null) return;
+
+    const amount = Number(amountText);
+
+    if (!Number.isInteger(amount) || amount <= 0) {
+        alert("Enter a whole number greater than zero.");
+        return;
+    }
+
+    const change = amount * direction;
+
+    if (product.stock + change < 0) {
+        alert("There isn't enough stock to remove that quantity.");
+        return;
+    }
+
+    product.stock += change;
+
+    state.movements.unshift({
+        id: Date.now(),
+        productId: product.id,
+        productName: product.name,
+        change,
+        reason: direction > 0 ? "New stock" : "Stock correction",
+        time: new Date().toISOString()
+    });
+
+    saveState();
+    renderAll();
+}
+
+function renderBilling() {
+    const search = document.getElementById("billSearch").value.toLowerCase().trim();
+
+    const products = state.products.filter(product =>
+        product.name.toLowerCase().includes(search)
+    );
+
+    document.getElementById("billProducts").innerHTML = products.length
+        ? products.map(product => `
+            <tr>
+                <td>${escapeHTML(product.name)}</td>
+                <td>${money(product.price)}</td>
+                <td>${product.stock}</td>
+                <td>
+                    <button class="btn ${product.stock > 0 ? "btn-primary" : ""}"
+                        onclick="addToCart(${product.id})"
+                        ${product.stock <= 0 ? "disabled" : ""}>
+                        Add
+                    </button>
+                </td>
+            </tr>
+        `).join("")
+        : `<tr><td colspan="4" class="empty">No matching products.</td></tr>`;
+
+    renderCart();
+}
+
+document.getElementById("billSearch").addEventListener("input", renderBilling);
+
+function addToCart(id) {
+    const product = state.products.find(item => item.id === id);
+    if (!product || product.stock <= 0) return;
+
+    const cartItem = cart.find(item => item.productId === id);
+    const quantityInCart = cartItem ? cartItem.quantity : 0;
+
+    if (quantityInCart >= product.stock) {
+        alert("The bill quantity cannot exceed available stock.");
+        return;
+    }
+
+    if (cartItem) {
+        cartItem.quantity++;
+    } else {
+        cart.push({
+            productId: product.id,
+            quantity: 1
+        });
+    }
+
+    renderCart();
+}
+
+function changeCartQuantity(id, delta) {
+    const item = cart.find(entry => entry.productId === id);
+    const product = state.products.find(entry => entry.id === id);
+
+    if (!item || !product) return;
+
+    const next = item.quantity + delta;
+
+    if (next <= 0) {
+        cart = cart.filter(entry => entry.productId !== id);
+    } else if (next <= product.stock) {
+        item.quantity = next;
+    } else {
+        alert("Not enough stock available.");
+    }
+
+    renderCart();
+}
+
+function renderCart() {
+    const cartElement = document.getElementById("cartItems");
+
+    if (!cart.length) {
+        cartElement.innerHTML = `<div class="empty">No products added to this bill.</div>`;
+    } else {
+        cartElement.innerHTML = cart.map(item => {
+            const product = state.products.find(entry => entry.id === item.productId);
+            if (!product) return "";
+
+            return `
+                <div class="history-item">
+                    <div>
+                        <strong>${escapeHTML(product.name)}</strong>
+                        <small>${money(product.price)} each</small>
+                        <div style="margin-top:8px">
+                            <button class="btn" onclick="changeCartQuantity(${product.id}, -1)">−</button>
+                            <strong style="margin:0 10px">${item.quantity}</strong>
+                            <button class="btn" onclick="changeCartQuantity(${product.id}, 1)">+</button>
+                        </div>
+                    </div>
+                    <strong>${money(product.price * item.quantity)}</strong>
+                </div>
+            `;
+        }).join("");
+    }
+
+    const total = cart.reduce((sum, item) => {
+        const product = state.products.find(entry => entry.id === item.productId);
+        return sum + (product ? product.price * item.quantity : 0);
+    }, 0);
+
+    document.getElementById("subtotal").textContent = money(total);
+    document.getElementById("grandTotal").textContent = money(total);
+}
+
+function clearCart() {
+    if (!cart.length) return;
+
+    if (confirm("Clear this bill?")) {
+        cart = [];
+        renderCart();
+    }
+}
+
+function completeSale() {
+    if (!cart.length) {
+        alert("Add at least one product first.");
+        return;
+    }
+
+    // Validate all items before changing any stock.
+    for (const item of cart) {
+        const product = state.products.find(entry => entry.id === item.productId);
+
+        if (!product || item.quantity > product.stock) {
+            alert("Stock has changed. Please review the bill.");
+            renderBilling();
+            return;
+        }
+    }
+
+    const items = cart.map(item => {
+        const product = state.products.find(entry => entry.id === item.productId);
+
+        return {
+            productId: product.id,
+            name: product.name,
+            price: product.price,
+            unitCost: Number.isFinite(product.cost) ? product.cost : null,
+            quantity: item.quantity,
+            lineTotal: product.price * item.quantity
+        };
+    });
+
+    const total = items.reduce((sum, item) => sum + item.lineTotal, 0);
+    const hasAllCosts = items.every(item => Number.isFinite(item.unitCost));
+    const grossProfit = hasAllCosts
+        ? items.reduce((sum, item) => sum + (item.price - item.unitCost) * item.quantity, 0)
+        : null;
+
+    const sale = {
+        id: Math.max(0, ...state.sales.map(item => item.id)) + 1,
+        customer: document.getElementById("customerName").value.trim(),
+        items,
+        total,
+        grossProfit,
+        time: new Date().toISOString()
+    };
+
+    // Reduce inventory and record each stock movement.
+    for (const item of items) {
+        const product = state.products.find(entry => entry.id === item.productId);
+        product.stock -= item.quantity;
+
+        state.movements.unshift({
+            id: Date.now() + item.productId,
+            productId: product.id,
+            productName: product.name,
+            change: -item.quantity,
+            reason: `Sale #${sale.id}`,
+            time: sale.time
+        });
+    }
+
+    state.sales.unshift(sale);
+    saveState();
+
+    cart = [];
+    document.getElementById("customerName").value = "";
+
+    renderAll();
+    renderBilling();
+
+    alert(`Sale completed!\nBill #${sale.id}\nTotal: ${money(total)}`);
+}
+
+function renderHistory() {
+    const movementElement = document.getElementById("movementHistory");
+
+    movementElement.innerHTML = state.movements.length
+        ? state.movements.slice(0, 100).map(movement => `
+            <div class="history-item">
+                <div>
+                    <strong>${escapeHTML(movement.productName)}</strong>
+                    <small>${escapeHTML(movement.reason)} · ${new Date(movement.time).toLocaleString()}</small>
+                </div>
+                <strong class="${movement.change > 0 ? "positive" : "negative"}">
+                    ${movement.change > 0 ? "+" : ""}${movement.change}
+                </strong>
+            </div>
+        `).join("")
+        : `<div class="empty">No stock movements yet.</div>`;
+
+    const salesElement = document.getElementById("salesHistory");
+
+    salesElement.innerHTML = state.sales.length
+        ? state.sales.slice(0, 100).map(sale => `
+            <div class="history-item">
+                <div>
+                    <strong>Bill #${sale.id}</strong>
+                    <small>
+                        ${escapeHTML(sale.customer || "Walk-in customer")}
+                        · ${sale.items.length} product types
+                        · ${new Date(sale.time).toLocaleString()}
+                    </small>
+                </div>
+                <div style="text-align:right">
+                    <strong>${money(sale.total)}</strong>
+                    <small>${Number.isFinite(sale.grossProfit) ? `Gross profit ${money(sale.grossProfit)}` : "Cost not recorded"}</small>
+                </div>
+            </div>
+        `).join("")
+        : `<div class="empty">No completed bills yet.</div>`;
+}
+
+function exportData() {
+    const blob = new Blob([JSON.stringify(state, null, 2)], {
+        type: "application/json"
+    });
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download = "zerah-stockflow-demo-data.json";
+    link.click();
+
+    URL.revokeObjectURL(url);
+}
+
+function renderAll() {
+    renderDashboard();
+    renderInventory();
+    renderHistory();
+}
+
+renderAll();
+</script>
+<script src="../shared/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseClient = window.supabase.createClient(window.ZERAH_SUPABASE.url, window.ZERAH_SUPABASE.publishableKey);
+
+  const authScreen = document.getElementById("authScreen");
+  const stockflowApp = document.getElementById("stockflowApp");
+  const authForm = document.getElementById("authForm");
+  const authEmail = document.getElementById("authEmail");
+  const authPassword = document.getElementById("authPassword");
+  const authPasswordLabel = document.querySelector('label[for="authPassword"]');
+  const authHeading = document.getElementById("authHeading");
+  const authHelp = document.getElementById("authHelp");
+  const authSubmit = document.getElementById("authSubmit");
+  const passwordGroup = document.getElementById("passwordGroup");
+  const authMessage = document.getElementById("authMessage");
+  const showSignup = document.getElementById("showSignup");
+  const showLogin = document.getElementById("showLogin");
+  const resetPassword = document.getElementById("resetPassword");
+  let authMode = "login";
+
+  function showAuthMessage(message, type = "error") {
+    authMessage.textContent = message;
+    authMessage.className = "auth-message " + type;
+  }
+    function setAuthMode(mode) {
+    authMode = mode;
+    authMessage.className = "auth-message";
+
+    const isReset = mode === "reset";
+    const isRecovery = mode === "updatePassword";
+
+    passwordGroup.hidden = isReset;
+    authPassword.required = !isReset;
+    authPasswordLabel.textContent = isRecovery ? "New password" : "Password";
+    authPassword.autocomplete = isRecovery ? "new-password" : "current-password";
+
+    authHeading.textContent =
+      mode === "signup" ? "Create your account" :
+      isReset ? "Reset password" :
+      isRecovery ? "Choose a new password" :
+      "Sign in to StockFlow";
+
+    authHelp.textContent =
+      mode === "signup" ? "Create a login for your StockFlow workspace. Email confirmation may be required." :
+      isReset ? "We'll send a password-reset link to your email address." :
+      isRecovery ? "Enter a new password for this account." :
+      "Use your Supabase account to access your store workspace.";
+
+    authSubmit.textContent =
+      mode === "signup" ? "Create account" :
+      isReset ? "Send reset link" :
+      isRecovery ? "Save new password" :
+      "Sign in";
+
+    showSignup.hidden = mode !== "login";
+    resetPassword.hidden = mode !== "login";
+    showLogin.hidden = mode === "login";
+  }
+  
+  function showAuthenticatedApp() {
+    authScreen.hidden = true;
+    stockflowApp.hidden = false;
+  }
+  function showLoginScreen() {
+    stockflowApp.hidden = true;
+    authScreen.hidden = false;
+    setAuthMode("login");
+  }
+
+  showSignup.addEventListener("click", () => setAuthMode("signup"));
+  showLogin.addEventListener("click", () => setAuthMode("login"));
+  resetPassword.addEventListener("click", () => setAuthMode("reset"));
+
+  authForm.addEventListener("submit", async event => {
+    event.preventDefault();
+    authSubmit.disabled = true;
+    authSubmit.textContent = "Please wait…";
+    authMessage.className = "auth-message";
+    const email = authEmail.value.trim();
+    const password = authPassword.value;
+    try {
+      if (authMode === "signup") {
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
+        if (error) throw error;
+        if (data.session) {
+          showAuthenticatedApp();
+          showAuthMessage("Account created and signed in.", "success");
+        } else {
+          showAuthMessage("Account request submitted. Check your email to confirm it, then sign in.", "success");
+          setAuthMode("login");
+        }
+            } else if (authMode === "reset") {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(
+          email,
+          { redirectTo: window.location.href }
+        );
+        if (error) throw error;
+        showAuthMessage("If an account exists for that email, a reset link will be sent.", "success");
+      } else if (authMode === "updatePassword") {
+        const { error } = await supabaseClient.auth.updateUser({ password });
+        if (error) throw error;
+        showAuthenticatedApp();
+        showAuthMessage("Password updated. You are signed in.", "success");
+      } else {
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        showAuthenticatedApp();
+      }
+    } catch (error) {
+      showAuthMessage(error.message || "Authentication failed. Please try again.");
+    } finally {
+      authSubmit.disabled = false;
+            authSubmit.textContent =
+        authMode === "signup" ? "Create account" :
+        authMode === "reset" ? "Send reset link" :
+        authMode === "updatePassword" ? "Save new password" :
+        "Sign in";
+    }
+  });
+
+  document.getElementById("signOutButton").addEventListener("click", async () => {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) alert("Could not sign out: " + error.message);
+    else showLoginScreen();
+  });
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === "PASSWORD_RECOVERY") {
+      authScreen.hidden = false;
+      stockflowApp.hidden = true;
+      setAuthMode("updatePassword");
+      showAuthMessage("Enter and save a new password for this account.", "success");
+    } else if (session) {
+      showAuthenticatedApp();
+    } else {
+      showLoginScreen();
+    }
+  });
+    
+</script>
+<script src="../shared/stockflow-cloud.js"></script>
+<script src="../shared/shipment-tally.js"></script>
+</body>
+</html>
